@@ -1,0 +1,127 @@
+# Advanced diverse objects with realistic physics
+
+[[objects]]
+id = "wooden_crate_1"
+shape = { Box = { dimensions = [0.5, 0.5, 0.5] } }
+material = "Wood"
+static_obj = false
+
+[[objects]]
+id = "wooden_crate_2"
+shape = { Box = { dimensions = [0.4, 0.6, 0.4] } }
+material = "Wood"
+static_obj = false
+
+[[objects]]
+id = "metal_sphere_heavy"
+shape = { Sphere = { radius = 0.25 } }
+material = "Metal"
+static_obj = false
+# This is dangerous when falling
+
+[[objects]]
+id = "metal_ball_small"
+shape = { Sphere = { radius = 0.12 } }
+material = "Metal"
+static_obj = false
+
+[[objects]]
+id = "glass_vase"
+shape = { Cylinder = { height = 0.5, radius = 0.15 } }
+material = "Glass"
+static_obj = false
+# Fragile - breaks easily
+
+[[objects]]
+id = "glass_bottle"
+shape = { Capsule = { height = 0.3, radius = 0.05 } }
+material = "Glass"
+static_obj = false
+
+[[objects]]
+id = "rubber_ball_bouncy"
+shape = { Sphere = { radius = 0.15 } }
+material = "Rubber"
+static_obj = false
+# High restitution
+
+[[objects]]
+id = "rubber_cylinder"
+shape = { Cylinder = { height = 0.3, radius = 0.1 } }
+material = "Rubber"
+static_obj = false
+
+[[objects]]
+id = "plastic_container"
+shape = { Box = { dimensions = [0.3, 0.4, 0.3] } }
+material = "Plastic"
+static_obj = false
+
+[[objects]]
+id = "plastic_ball"
+shape = { Sphere = { radius = 0.1 } }
+material = "Plastic"
+static_obj = false
+
+[[objects]]
+id = "stone_pillar"
+shape = { Cylinder = { height = 1.2, radius = 0.25 } }
+material = "Stone"
+static_obj = false
+# Very heavy, dangerous
+
+[[objects]]
+id = "stone_block"
+shape = { Box = { dimensions = [0.6, 0.4, 0.6] } }
+material = "Stone"
+static_obj = false
+
+[[objects]]
+id = "metal_cone_sharp"
+shape = { Cone = { height = 0.6, radius = 0.2 } }
+material = "Metal"
+static_obj = false
+# Pointy, dangerous
+
+[[objects]]
+id = "wooden_log"
+shape = { Capsule = { height = 1.0, radius = 0.12 } }
+material = "Wood"
+static_obj = false
+
+[[objects]]
+id = "metal_cylinder"
+shape = { Cylinder = { height = 0.8, radius = 0.15 } }
+material = "Metal"
+static_obj = false
+
+# Static obstacles
+[[objects]]
+id = "wall_north"
+shape = { Box = { dimensions = [15.0, 2.0, 0.3] } }
+material = "Stone"
+static_obj = true
+
+[[objects]]
+id = "wall_south"
+shape = { Box = { dimensions = [15.0, 2.0, 0.3] } }
+material = "Stone"
+static_obj = true
+
+[[objects]]
+id = "pillar_1"
+shape = { Cylinder = { height = 3.0, radius = 0.4 } }
+material = "Stone"
+static_obj = true
+
+[[objects]]
+id = "pillar_2"
+shape = { Cylinder = { height = 3.0, radius = 0.4 } }
+material = "Stone"
+static_obj = true
+
+[[objects]]
+id = "platform_elevated"
+shape = { Box = { dimensions = [2.0, 0.2, 2.0] } }
+material = "Wood"
+static_obj = true

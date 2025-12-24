@@ -1,0 +1,50 @@
+[training]
+n_episodes = 50000
+rollout_steps = 4096
+n_parallel_envs = 1
+use_visualization = true
+
+[ppo]
+learning_rate = 0.0003
+gamma = 0.99
+gae_lambda = 0.95
+clip_epsilon = 0.2
+entropy_coef = 0.02  # Increased for more exploration
+value_coef = 0.5
+max_grad_norm = 0.5
+n_epochs = 15  # More training per rollout
+batch_size = 128
+
+[network]
+hidden_sizes = [512, 256, 128]  # Larger network for complex tasks
+
+[environment]
+max_steps = 2000
+enable_damage = true
+enable_multi_goals = true
+enable_visualization = true
+
+[reward_weights]
+velocity = 1.0
+distance = 0.1
+stability = 0.5
+energy = 0.05
+smoothness = 0.1
+health = 5.0
+goal_completion = 100.0
+threat_avoidance = 50.0
+object_manipulation = 75.0
+fallen_penalty = -100.0
+death_penalty = -200.0
+
+[goals]
+max_concurrent_goals = 5
+goal_timeout_multiplier = 1.5
+priority_update_frequency = 10  # steps
+
+[logging]
+log_interval = 5
+save_interval = 100
+checkpoint_dir = "checkpoints"
+metrics_dir = "metrics"
+enable_tensorboard = false
