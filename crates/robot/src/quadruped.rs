@@ -8,24 +8,44 @@ pub struct Leg {
     pub hip_x: Actuator,
     pub hip_y: Actuator,
     pub knee: Actuator,
+    pub gripper: Gripper,
     pub contact_sensor: ContactSensor,
     pub hip_body: BodyHandle,
     pub thigh_body: BodyHandle,
     pub shin_body: BodyHandle,
 }
 
+#[derive(Debug, Clone)]
+pub struct Head {
+    pub pitch: Actuator,  // Up/down
+    pub yaw: Actuator,    // Left/right
+    pub body: BodyHandle,
+}
+
+#[derive(Debug, Clone)]
+pub struct Gripper {
+    pub open_close: Actuator,
+    pub is_grasping: bool,
+    pub grasped_object: Option<usize>,
+    pub grip_force: f32,
+}
+
 pub struct QuadrupedRobot {
     pub base_body: BodyHandle,
+    pub head: Head,
     pub legs: [Leg; 4],
     pub imu: IMU,
     pub encoders: Vec<Encoder>,
     pub body_mass: f32,
     pub body_dimensions: na::Vector3<f32>,
+    pub health: f32,
+    pub max_health: f32,
 }
 
 impl QuadrupedRobot {
     pub fn new(physics: &mut PhysicsEngine, spec: &RobotConfig) -> Self {
         let base_body = Self::create_base_body(physics, spec);
+        let head = Self::create_head(physics, base_body, spec);
         let legs = [
             Self::create_leg(physics, base_body, spec, 0),
             Self::create_leg(physics, base_body, spec, 1),
@@ -35,11 +55,51 @@ impl QuadrupedRobot {
 
         Self {
             base_body,
+            head,
             legs,
             imu: IMU::new(0.014, 0.15),
-            encoders: vec![Encoder::new(8192, 0.0005); 12],
+            encoders: vec![Encoder::new(8192, 0.0005); 16],  // 12 legs + 2 head + 2 grippers
             body_mass: spec.body.mass,
             body_dimensions: na::Vector3::from_row_slice(&spec.body.dimensions),
+            health: 100.0,
+            max_health: 100.0,
+        }
+    }
+
+    fn create_head(physics: &mut PhysicsEngine, _base_body: BodyHandle, _spec: &RobotConfig) -> Head {
+        let head_body = physics.create_rigid_body(
+            RigidBodyBuilder::dynamic()
+                .translation(vector![0.0, 0.4, 0.3])  // In front and above base
+                .build()
+        );
+
+        let head_collider = ColliderBuilder::ball(0.1)
+            .density(0.5)
+            .friction(0.3)
+            .build();
+        physics.create_collider(head_collider, head_body);
+
+        let pitch_spec = ActuatorSpec {
+            continuous_torque: 5.0,
+            peak_torque: 10.0,
+            max_velocity: 20.0,
+            rotor_inertia: 0.00001,
+            gear_ratio: 6.0,
+            motor_constant: 0.05,
+            resistance: 0.03,
+            damping: 0.3,
+            friction: 0.05,
+            backlash: 0.01,
+            position_limit: (-1.0, 1.0),  // ~±57 degrees
+        };
+
+        Head {
+            pitch: Actuator::new(pitch_spec.clone()),
+            yaw: Actuator::new(ActuatorSpec {
+                position_limit: (-1.5, 1.5),  // ~±86 degrees
+                ..pitch_spec
+            }),
+            body: head_body,
         }
     }
 
@@ -90,10 +150,30 @@ impl QuadrupedRobot {
         let thigh_body = physics.create_rigid_body(RigidBodyBuilder::dynamic().build());
         let shin_body = physics.create_rigid_body(RigidBodyBuilder::dynamic().build());
 
+        let gripper_spec = ActuatorSpec {
+            continuous_torque: 3.0,
+            peak_torque: 6.0,
+            max_velocity: 10.0,
+            rotor_inertia: 0.00001,
+            gear_ratio: 4.0,
+            motor_constant: 0.03,
+            resistance: 0.02,
+            damping: 0.2,
+            friction: 0.03,
+            backlash: 0.005,
+            position_limit: (0.0, 0.8),  // 0 = open, 0.8 = closed
+        };
+
         Leg {
             hip_x,
             hip_y,
             knee,
+            gripper: Gripper {
+                open_close: Actuator::new(gripper_spec),
+                is_grasping: false,
+                grasped_object: None,
+                grip_force: 0.0,
+            },
             contact_sensor: ContactSensor::new((0.0, 100.0), 2.0),
             hip_body,
             thigh_body,
