@@ -1,0 +1,17 @@
+[[objects]]
+id = "cardboard_box_1"
+mass = 2.0
+dimensions = [0.4, 0.4, 0.5]
+shape = "box"
+friction = 0.5
+restitution = 0.1
+static_obj = false
+
+[[objects]]
+id = "wall_1"
+mass = 1000000.0
+dimensions = [10.0, 0.2, 3.0]
+shape = "box"
+friction = 0.9
+restitution = 0.05
+static_obj = true
