@@ -27,7 +27,7 @@ fn setup_scene(
 ) {
     // Ground plane
     commands.spawn(PbrBundle {
-        mesh: meshes.add(Plane3d::default().mesh().size(100.0, 100.0)),
+        mesh: meshes.add(shape::Plane::from_size(100.0).into()),
         material: materials.add(StandardMaterial {
             base_color: Color::rgb(0.3, 0.5, 0.3),
             perceptual_roughness: 0.9,
@@ -42,15 +42,21 @@ fn setup_scene(
         let offset = i as f32 * 5.0;
         // X-axis lines
         commands.spawn(PbrBundle {
-            mesh: meshes.add(Cuboid::new(100.0, 0.02, 0.02)),
-            material: materials.add(Color::rgb(0.2, 0.2, 0.2)),
+            mesh: meshes.add(shape::Box::new(100.0, 0.02, 0.02).into()),
+            material: materials.add(StandardMaterial {
+                base_color: Color::rgb(0.2, 0.2, 0.2),
+                ..default()
+            }),
             transform: Transform::from_xyz(0.0, 0.01, offset),
             ..default()
         });
         // Z-axis lines
         commands.spawn(PbrBundle {
-            mesh: meshes.add(Cuboid::new(0.02, 0.02, 100.0)),
-            material: materials.add(Color::rgb(0.2, 0.2, 0.2)),
+            mesh: meshes.add(shape::Box::new(0.02, 0.02, 100.0).into()),
+            material: materials.add(StandardMaterial {
+                base_color: Color::rgb(0.2, 0.2, 0.2),
+                ..default()
+            }),
             transform: Transform::from_xyz(offset, 0.01, 0.0),
             ..default()
         });
@@ -103,16 +109,16 @@ fn update_objects(
 }
 
 fn handle_input(
-    keyboard: Res<ButtonInput<KeyCode>>,
+    keyboard: Res<Input<KeyCode>>,
     mut sim_state: ResMut<crate::SimulationState>,
 ) {
     if keyboard.just_pressed(KeyCode::Space) {
         sim_state.paused = !sim_state.paused;
     }
-    if keyboard.just_pressed(KeyCode::ArrowUp) {
+    if keyboard.just_pressed(KeyCode::Up) {
         sim_state.speed = (sim_state.speed * 1.5).min(10.0);
     }
-    if keyboard.just_pressed(KeyCode::ArrowDown) {
+    if keyboard.just_pressed(KeyCode::Down) {
         sim_state.speed = (sim_state.speed / 1.5).max(0.1);
     }
 }

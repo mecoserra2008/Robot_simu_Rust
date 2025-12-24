@@ -51,7 +51,7 @@ impl CameraController {
 pub fn camera_controller_system(
     mut mouse_motion: EventReader<MouseMotion>,
     mut mouse_wheel: EventReader<MouseWheel>,
-    mouse_button: Res<ButtonInput<MouseButton>>,
+    mouse_button: Res<Input<MouseButton>>,
     mut query: Query<(&mut Transform, &mut CameraController)>,
 ) {
     for (mut transform, mut controller) in query.iter_mut() {
