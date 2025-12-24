@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-bevy = { version = "0.12", default-features = false, features = ["bevy_winit", "bevy_render", "bevy_core_pipeline", "bevy_pbr", "bevy_asset", "x11"] }
+bevy = { version = "0.12", default-features = false, features = ["bevy_winit", "bevy_render", "bevy_core_pipeline", "bevy_pbr", "bevy_asset", "bevy_ui", "bevy_text", "x11"] }
 bevy_rapier3d = { version = "0.23", features = ["debug-render-3d"] }
 physics = { path = "../physics" }
 robot = { path = "../robot" }
