@@ -1,0 +1,42 @@
+[workspace]
+members = [
+    "crates/physics",
+    "crates/robot",
+    "crates/environment",
+    "crates/rl",
+    "crates/visualization",
+]
+resolver = "2"
+
+[package]
+name = "quadruped_rl"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+physics = { path = "crates/physics" }
+robot = { path = "crates/robot" }
+environment = { path = "crates/environment" }
+rl = { path = "crates/rl" }
+visualization = { path = "crates/visualization", optional = true }
+
+nalgebra = "0.32"
+rand = { version = "0.8", features = ["small_rng"] }
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+anyhow = "1.0"
+rayon = "1.8"
+crossbeam = "0.8"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+ndarray = { version = "0.15", features = ["rayon"] }
+rand_distr = "0.4"
+
+[features]
+default = []
+visualization = ["dep:visualization"]
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1

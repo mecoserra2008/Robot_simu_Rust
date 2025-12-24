@@ -1,0 +1,8 @@
+[package]
+name = "visualization"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Bevy visualization is optional and not implemented in this minimal version
+# bevy = { version = "0.12", optional = true }
